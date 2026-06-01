@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    @apply text-[rgba(255,255,255,0.87)];
+    background: linear-gradient(180deg, rgba(138, 3, 77, 1) 0%, rgba(0, 0, 0, 1) 100%);
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  }
+
+  body {
+    @apply grid place-items-center min-w-[320px] min-h-screen relative m-0;
+    scroll-behavior: smooth;
+    background: inherit;
+  }
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.08;
+  background: url("./logo.svg");
+  background-size: 256px 224px;
+  background-repeat: repeat;
+  background-attachment: fixed;
+  transform: rotate(-12deg) scale(1.35);
+  pointer-events: none;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.08;
+  background: url("./logo.svg");
+  background-size: 256px 224px;
+  background-repeat: repeat;
+  background-attachment: fixed;
+  transform: rotate(-12deg) scale(1.35);
+  animation: slideBottom 40s linear infinite reverse;
+  pointer-events: none;
+}
+
+/* Gallery is visible by default */
+#gallery {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 600ms ease, transform 600ms ease;
+  pointer-events: auto;
+}
+/* (gallery always visible; legacy :target/revealed rules removed) */
+
+@keyframes slide {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 256px 224px;
+  }
+}
+
+@keyframes slideBottom {
+  from {
+    background-position: 256px 224px;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Floating buns animation */
+.floating-bun {
+  position: absolute;
+  opacity: 0.75;
+  will-change: transform, opacity;
+  pointer-events: none;
+  user-select: none;
+  transform-origin: center;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateY(-56px) translateX(28px) rotate(6deg) scale(1.06);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+    opacity: 0.75;
+  }
+}
+
+.bun1 { left: 6%; top: 6%; width: 140px; animation: float 14s ease-in-out infinite; animation-delay: -1s; }
+.bun2 { right: 6%; top: 12%; width: 200px; animation: float 18s ease-in-out infinite; animation-delay: -4s; }
+.bun3 { left: 14%; bottom: 12%; width: 160px; animation: float 16s ease-in-out infinite; animation-delay: -6s; }
+.bun4 { right: 18%; bottom: 8%; width: 130px; animation: float 12s ease-in-out infinite; animation-delay: -2s; }
+.bun5 { left: 46%; top: 4%; width: 96px; animation: float 20s ease-in-out infinite; animation-delay: -8s; }
+.bun6 { right: 44%; top: 26%; width: 110px; animation: float 15s ease-in-out infinite; animation-delay: -3s; }
+@media (prefers-reduced-motion) {
+  *,
+  ::before,
+  ::after {
+    animation: none !important;
+  }
+}
+
+/* Heart pop animation for love.png click */
+.heart {
+  position: absolute;
+  bottom: 1.5rem;
+  transform: translateX(0) translateY(0) scale(1);
+  animation: heartRise 1.6s cubic-bezier(.2,.9,.2,1) forwards;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* use CSS variable --dx for horizontal drift and --s for size multiplier */
+@keyframes heartRise {
+  0% {
+    transform: translateX(0) translateY(0) scale(0.9);
+    opacity: 1;
+  }
+  30% {
+    transform: translateX(calc(var(--dx) * 0.35)) translateY(-40px) scale(1.15);
+    opacity: 1;
+  }
+  70% {
+    transform: translateX(calc(var(--dx) * 0.7)) translateY(-120px) scale(1.25);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(var(--dx)) translateY(-220px) scale(1.35);
+    opacity: 0;
+  }
+}
+
+/* Infinite carousel animation */
+.carousel-track {
+  animation: carouselScroll 60s linear infinite;
+}
+
+@keyframes carouselScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* artworks infinite carousel */
+.art-carousel {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  animation: artScroll 40s linear infinite;
+}
+
+@keyframes artScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
