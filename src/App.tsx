@@ -1,7 +1,6 @@
 import "./index.css";
 import { useRef, useEffect, useState } from "react";
 import logo from "./logo.svg";
-import love from "./love.png";
 import react from "./react.svg";
 import perf from "./perf.jpg";
 import mus from "./mus.mp3";
@@ -73,6 +72,7 @@ export function App() {
   const rafRef = useRef<number | null>(null);
 
   const [herActive, setHerActive] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -85,11 +85,18 @@ export function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+    const isPhone = typeof navigator !== "undefined" && mobileRegex.test(navigator.userAgent);
+    const smallScreen = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
+    setIsMobile(isPhone || smallScreen);
+  }, []);
+
   const playMusic = () => {
     if (!audioRef.current) {
       audioRef.current = new Audio(mus);
       audioRef.current.preload = "auto";
-      audioRef.current.volume = 0.50;
+      audioRef.current.volume = 0.5;
     }
     audioRef.current.currentTime = 0;
     audioRef.current.play().catch(() => {
@@ -115,12 +122,11 @@ export function App() {
     return () => clearInterval(t);
   }, []);
 
-  // Hearts state for click effect on the small PNG
+  // Hearts state for click effect on the perf image
   const [hearts, setHearts] = useState<
     { id: number; startX: number; startY: number; targetX: number; targetY: number; size: number }[]
   >([]);
   const heartId = useRef(0);
-  const loveRef = useRef<HTMLDivElement>(null);
   const perfRef = useRef<HTMLDivElement>(null);
 
   // spawn hearts that fly from bottom to middle of perf.jpg
@@ -193,6 +199,16 @@ export function App() {
 
   const prevHer = () => setHerActive((c) => (c - 1 + herImages.length) % herImages.length);
   const nextHer = () => setHerActive((c) => (c + 1) % herImages.length);
+
+  if (isMobile) {
+    return (
+      <main className="min-h-screen w-screen flex items-center justify-center px-6 text-center bg-black text-white">
+        <h1 className="text-3xl sm:text-5xl font-semibold px-4">
+          я же сказал, что с телефона нельзя
+        </h1>
+      </main>
+    );
+  }
 
   return (
     <>
@@ -272,31 +288,22 @@ export function App() {
 
       <section className="w-screen px-6 py-16">
         <div className="mx-auto max-w-[90rem]">
-            <div className="grid gap-10 lg:grid-cols-[280px_minmax(0,1fr)]">
-            <div className="flex flex-col gap-8">
-              <div className="text-left">
-                <p className="text-4xl font-semibold text-white">MAA GIRRLLL</p>
-              </div>
-              <div className="rounded-[1.75rem]  p-6 text-left ">
-                <div ref={loveRef} className="h-[220px] w-full overflow-hidden rounded-3xl relative">
-                  <img
-                    src={love}
-                    alt="Love"
-                    className="h-full w-full object-cover cursor-pointer"
-                    onClick={onLoveClick}
-                  />
-                </div>
-              </div>
+          <div className="flex flex-col gap-6 lg:mx-auto lg:w-[90%]">
+            <div className="text-center">
+              <p className="text-4xl font-semibold text-white">MAA GIRRLLL</p>
             </div>
 
-            <div className="flex flex-col gap-6 lg:mt-16">
-              <div ref={perfRef} className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl">
-                <img src={perf} alt="Big preview" className="h-[1200px] w-full object-cover" />
-              </div>
-  
-              <div className="text-center">
-                <p className="text-5xl font-black uppercase tracking-[0.2em] text-white">FUCKING PERFECTION!</p>
-              </div>
+            <div ref={perfRef} className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl">
+              <img
+                src={perf}
+                alt="Big preview"
+                className="h-[1200px] w-full object-cover cursor-pointer"
+                onClick={onLoveClick}
+              />
+            </div>
+
+            <div className="text-center">
+              <p className="text-5xl font-black uppercase tracking-[0.2em] text-white">SHES A FUCKING PERFECTION!</p>
             </div>
           </div>
         </div>
@@ -368,7 +375,7 @@ export function App() {
 
       
 
-        {/* Hearts overlay flying from love to perf */}
+        {/* Hearts overlay flying from perf image */}
         <div className="hearts-root fixed inset-0 pointer-events-none z-50">
           {hearts.map((heart) => {
             const deltaX = heart.targetX - heart.startX;
