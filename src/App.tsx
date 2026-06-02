@@ -364,7 +364,7 @@ export function App() {
           <div className="relative overflow-hidden">
             <div className="art-carousel flex gap-8">
               {[...artworkImages, ...artworkImages].map((src, idx) => (
-                <div key={idx} className="flex-shrink-0 w-[320px] h-[320px] rounded-xl overflow-hidden border border-white/10 bg-white/5">
+                <div key={idx} className="flex-shrink-0 w-[420px] h-[420px] rounded-xl overflow-hidden border border-white/10 bg-white/5">
                   <img src={src} alt={`art-${idx}`} className="w-full h-full object-cover" />
                 </div>
               ))}
