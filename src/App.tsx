@@ -204,7 +204,8 @@ export function App() {
     return (
       <main className="min-h-screen w-screen flex items-center justify-center px-6 text-center bg-black text-white">
         <h1 className="text-3xl sm:text-5xl font-semibold px-4">
-          я же сказал, что с телефона нельзя
+          я же сказал, что с телефона нельзя 
+          
         </h1>
       </main>
     );
@@ -236,9 +237,9 @@ export function App() {
       <section id="gallery" className="w-screen px-6 py-16">
         <div className="mx-auto max-w-[90rem]">
           <div className="mb-10 text-center">
-            <p className="text-sm uppercase tracking-[0.4em] text-white/70">SWAGIEST IN UKRAINE</p>
+            <p className="text-sm uppercase tracking-[0.4em] text-white/70">SWAGIEST IN DA BUILDING</p>
             <h2 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">
-              BULOCHKA - GODDES HERSELF
+              BULOCHKA
             </h2>
           </div>
           <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5/10 shadow-2xl backdrop-blur-xl">
@@ -314,7 +315,7 @@ export function App() {
           <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-0">
             <div className="flex flex-col gap-8">
               <div className="lg:w-[640px] w-full">
-                <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-10 text-left shadow-2xl min-h-[280px]">
+                <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-10 text-left shadow-2xl min-h-[280px] transition-all duration-300 hover:border-white/80 hover:bg-white/10 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.35),0_0_24px_rgba(255,255,255,0.08)] hover:-translate-y-0.5">
                   <h3 className="text-5xl font-semibold text-white">EXECUTIVE SUMMARY & VISUAL SPECIFICATIONS</h3>
                   <ul className="mt-6 text-3xl text-white/80 space-y-4 list-disc list-inside">
                     <li>Honorable mention: her absolutely freakin' stunning brown eyes</li>
@@ -327,7 +328,7 @@ export function App() {
                 </div>
               </div>
               <div className="lg:w-[640px] w-full">
-                <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-10 text-left shadow-2xl min-h-[280px]">
+                <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-10 text-left shadow-2xl min-h-[280px] transition-all duration-300 hover:border-white/80 hover:bg-white/10 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.35),0_0_24px_rgba(255,255,255,0.08)] hover:-translate-y-0.5">
                   <h3 className="text-5xl font-semibold text-white">CORE CAPABILITIES & TALENT MATRIX</h3>
                   <ul className="mt-6 text-3xl text-white/80 space-y-4 list-disc list-inside">
                     <li>Her drawing skills are genuinely insane. She doesn’t just doodle; she creates absolute masterpieces. Her artistic vision, execution, and attention to detail are out of this world.</li>
@@ -340,7 +341,7 @@ export function App() {
               </div>
             </div>
             <div className="lg:w-[640px] w-full lg:mt-128">
-              <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-10 text-left shadow-2xl min-h-[280px]">
+              <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-10 text-left shadow-2xl min-h-[280px] transition-all duration-300 hover:border-white/80 hover:bg-white/10 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.35),0_0_24px_rgba(255,255,255,0.08)] hover:-translate-y-0.5">
                 <h3 className="text-5xl font-semibold text-white">PERSONALITY & CHARM</h3>
                 <ul className="mt-6 text-3xl text-white/80 space-y-4 list-disc list-inside">
                   <li>She is incredibly witty. Her sense of humor is sharp as fuck, and she can keep up with any conversation at lightning speed.</li>
