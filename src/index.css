@@ -148,6 +148,30 @@ body::after {
   }
 }
 
+/* hearts fly from love to perf */
+.heart-flying {
+  position: fixed;
+  display: inline-block;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: heartFlyToTarget 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes heartFlyToTarget {
+  0% {
+    transform: translate(0, 0) scale(0.8);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(calc(var(--endX) * 0.5), calc(var(--endY) * 0.5)) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--endX), var(--endY)) scale(1.3);
+    opacity: 0;
+  }
+}
+
 /* Infinite carousel animation */
 .carousel-track {
   animation: carouselScroll 60s linear infinite;

@@ -4,6 +4,7 @@ import logo from "./logo.svg";
 import love from "./love.png";
 import react from "./react.svg";
 import perf from "./perf.jpg";
+import mus from "./mus.mp3";
 import her1 from "./her/1.jpg";
 import her2 from "./her/2.jpg";
 import her3 from "./her/3.jpg";
@@ -72,6 +73,29 @@ export function App() {
   const rafRef = useRef<number | null>(null);
 
   const [herActive, setHerActive] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio(mus);
+    audioRef.current.preload = "auto";
+    audioRef.current.volume = 0.75;
+    return () => {
+      audioRef.current?.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  const playMusic = () => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio(mus);
+      audioRef.current.preload = "auto";
+      audioRef.current.volume = 0.50;
+    }
+    audioRef.current.currentTime = 0;
+    audioRef.current.play().catch(() => {
+      // ignore autoplay prevention; playback is user-initiated
+    });
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -93,32 +117,47 @@ export function App() {
 
   // Hearts state for click effect on the small PNG
   const [hearts, setHearts] = useState<
-    { id: number; left: number; dx: number; size: number }[]
+    { id: number; startX: number; startY: number; targetX: number; targetY: number; size: number }[]
   >([]);
   const heartId = useRef(0);
+  const loveRef = useRef<HTMLDivElement>(null);
+  const perfRef = useRef<HTMLDivElement>(null);
 
-  // spawn many hearts that fly up and spread horizontally
+  // spawn hearts that fly from bottom to middle of perf.jpg
   const onLoveClick = () => {
     const spawnCount = 12;
-    const newHearts: { id: number; left: number; dx: number; size: number }[] = [];
+    if (!perfRef.current) return;
+
+    const perfRect = perfRef.current.getBoundingClientRect();
+
+    // spawn position: anywhere on the perf image
+    const startXBase = perfRect.left;
+    const maxStartX = perfRect.left + perfRect.width;
+    const minStartY = perfRect.top;
+    const maxStartY = perfRect.top + perfRect.height;
+
+    // target: center of perf image
+    const targetX = perfRect.left + perfRect.width / 2;
+    const targetY = perfRect.top + perfRect.height / 2;
+
+    const newHearts: { id: number; startX: number; startY: number; targetX: number; targetY: number; size: number }[] = [];
     for (let i = 0; i < spawnCount; i++) {
       const id = ++heartId.current;
-      // spread around the image horizontally
-      const left = 10 + Math.random() * 80; // percent
-      // horizontal drift px (-120 .. 120)
-      const dx = -120 + Math.random() * 240;
       const size = 20 + Math.floor(Math.random() * 36); // px
-      newHearts.push({ id, left, dx, size });
+      const startX = startXBase + Math.random() * (maxStartX - startXBase);
+      const startY = minStartY + Math.random() * (maxStartY - minStartY);
+      newHearts.push({ id, startX, startY, targetX, targetY, size });
       // schedule removal per heart
       setTimeout(() => {
         setHearts((h) => h.filter((x) => x.id !== id));
-      }, 1600 + Math.floor(Math.random() * 400));
+      }, 1200 + Math.floor(Math.random() * 300));
     }
     setHearts((h) => [...h, ...newHearts]);
   };
 
   const scrollToGallery = (e: any) => {
     e?.preventDefault();
+    playMusic();
     const target = document.getElementById("gallery");
     if (!target) return;
     target.classList.add("revealed");
@@ -172,18 +211,18 @@ export function App() {
         <a
           href="#gallery"
           onClick={scrollToGallery}
-          className="w-full max-w-[50rem] px-10 py-5 rounded-2xl border border-white bg-black text-white text-3xl font-semibold shadow-lg transition duration-500 ease-in-out hover:bg-gray-200 hover:text-black"
+          className="w-full max-w-[50rem] px-10 py-5 rounded-2xl border border-black border-radius-4 bg-gray-200 text-black text-3xl font-semibold shadow-lg transition duration-500 ease-in-out hover:bg-black hover:text-white"
         >
-          Смотреть
+          Start admiring
         </a>
       </main>
 
       <section id="gallery" className="w-screen px-6 py-16">
         <div className="mx-auto max-w-[90rem]">
           <div className="mb-10 text-center">
-            <p className="text-sm uppercase tracking-[0.4em] text-white/70">SWAGIEST BUNS</p>
+            <p className="text-sm uppercase tracking-[0.4em] text-white/70">SWAGIEST IN UKRAINE</p>
             <h2 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">
-              In SLOVAKIA
+              BULOCHKA - GODDES HERSELF
             </h2>
           </div>
           <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5/10 shadow-2xl backdrop-blur-xl">
@@ -236,10 +275,10 @@ export function App() {
             <div className="grid gap-10 lg:grid-cols-[280px_minmax(0,1fr)]">
             <div className="flex flex-col gap-8">
               <div className="text-left">
-                <p className="text-4xl font-semibold text-white">Did u saw that?</p>
+                <p className="text-4xl font-semibold text-white">MAA GIRRLLL</p>
               </div>
               <div className="rounded-[1.75rem]  p-6 text-left ">
-                <div className="h-[220px] w-full overflow-hidden rounded-3xl relative">
+                <div ref={loveRef} className="h-[220px] w-full overflow-hidden rounded-3xl relative">
                   <img
                     src={love}
                     alt="Love"
@@ -251,7 +290,7 @@ export function App() {
             </div>
 
             <div className="flex flex-col gap-6 lg:mt-16">
-              <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl">
+              <div ref={perfRef} className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl">
                 <img src={perf} alt="Big preview" className="h-[1200px] w-full object-cover" />
               </div>
   
@@ -271,7 +310,8 @@ export function App() {
                 <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-10 text-left shadow-2xl min-h-[280px]">
                   <h3 className="text-5xl font-semibold text-white">EXECUTIVE SUMMARY & VISUAL SPECIFICATIONS</h3>
                   <ul className="mt-6 text-3xl text-white/80 space-y-4 list-disc list-inside">
-                    <li>She is short, yea, but her presence is fucking massive.</li>
+                    <li>Honorable mention: her absolutely freakin' stunning brown eyes</li>
+                    <li>Her presence is fucking massive.</li>
                     <li>With SAINT dyed blonde hair that looks absolutely phenomenal. It gives off major main-character energy, perfectly framing her face and matching her overall killer aesthetic.</li>
                     <li>She sports this low-key devious, mischievous smile that is both incredibly captivating and slightly dangerous. It's the kind of smirk that literally melts my brains.</li>
                     <li>Her style is unmatched. She's not out here wearing basic-ass fast fashion; her outfits are deeply curated and stylish as fuck. An absolute queen, blending edgy alternative energy with high-tier street fashion. 10/10 drip.</li> 
@@ -328,21 +368,27 @@ export function App() {
 
       
 
-        {/* Hearts overlay across the whole viewport */}
+        {/* Hearts overlay flying from love to perf */}
         <div className="hearts-root fixed inset-0 pointer-events-none z-50">
-          {hearts.map((heart) => (
-            <span
-              key={heart.id}
-              className="heart"
-              style={{
-                left: `${heart.left}%`,
-                ["--dx" as any]: `${heart.dx}px`,
-                fontSize: `${heart.size}px`,
-              }}
-            >
-              ❤️
-            </span>
-          ))}
+          {hearts.map((heart) => {
+            const deltaX = heart.targetX - heart.startX;
+            const deltaY = heart.targetY - heart.startY;
+            return (
+              <span
+                key={heart.id}
+                className="heart-flying"
+                style={{
+                  left: `${heart.startX}px`,
+                  top: `${heart.startY}px`,
+                  fontSize: `${heart.size}px`,
+                  ["--endX" as any]: `${deltaX}px`,
+                  ["--endY" as any]: `${deltaY}px`,
+                }}
+              >
+                ❤️
+              </span>
+            );
+          })}
         </div>
 
       <footer className="w-screen px-6 py-12 border-t border-white/10">
